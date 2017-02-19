@@ -1,0 +1,118 @@
+% -*- mode: tex -*-
+%-
+% Copyright © 2017
+%	mirabilos <t.glaser@tarent.de>
+% with contributions by (among others)
+%	David Carlisle <http://tex.stackexchange.com/users/1090>
+%
+% Provided that these terms and disclaimer and all copyright notices
+% are retained or reproduced in an accompanying document, permission
+% is granted to deal in this work without restriction, including un‐
+% limited rights to use, publicly perform, distribute, sell, modify,
+% merge, give away, or sublicence.
+%
+% This work is provided “AS IS” and WITHOUT WARRANTY of any kind, to
+% the utmost extent permitted by applicable law, neither express nor
+% implied; without malicious intent or gross negligence. In no event
+% may a licensor, author or contributor be held liable for indirect,
+% direct, other damage, loss, or other issues arising in any way out
+% of dealing in the work, even if advised of the possibility of such
+% damage or existence of a defect, except proven that it results out
+% of said person’s immediate fault when using the work as intended.
+%-
+% Change UTF-8 input encoding to not error out, but substitute, upon
+% encountering characters not set up with newunicodechar.
+
+\NeedsTeXFormat{LaTeX2e}%
+\ProvidesPackage{unicodedomino}[2017/02/19 1.0 Domino for unknown codepoints]%
+\makeatletter%
+
+\ifx\numexpr\@undefined%
+ \PackageError{unicodedomino}{This package requires numexpr}%
+\fi%
+\ifx\UTFviii@defined\@undefined%
+ \PackageError{unicodedomino}{This package requires UTF-8 input encoding}%
+\fi%
+
+% nicer printing of codepoint hex numbers, not strictly necessary
+\def\unicodedomino@codepoint#1{%
+ \ifnum#1>65535%
+  U-000%
+ \else\ifnum#1>4095%
+  U+%
+ \else%
+  U+0%
+ \fi\fi%
+ \expandafter\UTFviii@hexnumber\expandafter{#1}%
+}%
+
+% override to beautify the output, not strictly necessary but requested
+\gdef\UTFviii@splitcsname#1:#2\relax{%
+ #2 (\expandafter\unicodedomino@codepoint\expandafter{%
+  \the\numexpr\decode@UTFviii#2\relax})%
+}%
+
+% render the actual domino piece
+\def\unicodedomino@box#1#2{%
+ \begingroup%
+ \fboxsep=.1em%
+ \fboxrule=.4pt%
+ \texttt{\fbox{\makebox[0pt][l]{\textsuperscript{#1}}\textsubscript{#2}}}%
+ \endgroup%
+}%
+
+% expand one hex nybble
+\def\unicodedomino@hex@ne#1{%
+ \ifnum#1>15 %
+  \expandafter\unicodedomino@hex@ne\expandafter{\the\numexpr(#1-8)/16\relax}%
+ \fi%
+ \UTFviii@hexdigit{\numexpr#1\ifnum#1>0-((#1-8)/16)*16\fi\relax}.%
+}%
+% expand all hex nybbles, zero-padded
+\def\unicodedomino@hex@ll#1{%
+ \ifnum#1<65536 0.\fi%
+ \ifnum#1<4096 0.\fi%
+ \expandafter\unicodedomino@hex@ne\expandafter{#1}%
+}%
+% call the appropriate box function
+\def\unicodedomino@hex@do#1.#2.#3.#4.#5.{%
+ \ifnum#1>0%
+  \unicodedomino@box{0#1#2}{#3#4#5}%
+ \else%
+  \unicodedomino@box{#2#3}{#4#5}%
+ \fi%
+}%
+% split nybbles and pass on
+\protected\def\unicodedomino@hex#1{%
+ \edef\temp{\expandafter\unicodedomino@hex@ll\expandafter{#1}}%
+ \expandafter\unicodedomino@hex@do\temp\relax%
+}%
+% split, decode and pass on
+\def\unicodedomino@decode#1:#2\relax{%
+ \expandafter\unicodedomino@hex\expandafter{%
+  \the\numexpr\decode@UTFviii#2\relax%
+ }%
+}%
+
+\def\UTFviii@defined#1{%
+ \ifx#1\relax%
+  % unknown char
+  \ifx\protect\@typeset@protect%
+   % not protected
+   \PackageWarning{inputenc}{%
+    Unicode\space char\space\expandafter\UTFviii@splitcsname\string#1\relax%
+    \space not\space set\space up\space for\space use\MessageBreak with\space%
+    LaTeX, replacing}%
+    \expandafter\unicodedomino@decode\string#1\relax%
+   \else%
+    % protected, just write the original character
+    \expandafter\@gobblefour\string#1%
+  \fi%
+ \else%
+  % known char, expand
+  \expandafter#1%
+ \fi%
+}%
+
+\makeatother%
+\endinput
