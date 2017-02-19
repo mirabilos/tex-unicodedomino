@@ -24,7 +24,7 @@
 % encountering characters not set up with newunicodechar.
 
 \NeedsTeXFormat{LaTeX2e}%
-\ProvidesPackage{unicodedomino}[2017/02/19 1.0 Domino for unknown codepoints]%
+\ProvidesPackage{unicodedomino}[2017/02/19 1.1 Domino for unknown codepoints]%
 \makeatletter%
 
 \ifx\numexpr\@undefined%
@@ -45,6 +45,49 @@
  \fi\fi%
  \expandafter\UTFviii@hexnumber\expandafter{#1}%
 }%
+
+% missing in utf8.def 2014/09/29 v1.1m (Debian jessie)
+\ifx\decode@UTFviii\@undefined%
+ \PackageWarning{unicodedomino}{Consider updating utf8.def}%
+ % taken from utf8.def 2016/02/28 v1.1s (Debian sid), no claims on this code
+ \gdef\decode@UTFviii#1\relax{%
+  \expandafter\UTFviii@cleanup\the\numexpr\dec@de@UTFviii#1\relax)))))\@empty%
+ }%
+ \gdef\UTFviii@cleanup#1)#2\@empty{#1}%
+ \gdef\dec@de@UTFviii#1{%
+  \ifx\relax#1%
+  \else
+   \ifnum`#1>"EF
+    ((((`#1-"F0)%
+   \else
+    \ifnum`#1>"DF
+      (((`#1-"E0)%
+    \else
+     \ifnum`#1>"BF
+      ((`#1-"C0)%
+     \else
+      \ifnum`#1>"7F
+       )*64+(`#1-"80)%
+      \else
+       +`#1 %
+      \fi
+     \fi
+    \fi
+   \fi
+   \expandafter\dec@de@UTFviii
+  \fi%
+ }%
+ \gdef\UTFviii@hexnumber#1{%
+  \ifnum#1>15 %
+   \expandafter\UTFviii@hexnumber\expandafter{\the\numexpr(#1-8)/16\relax}%
+  \fi%
+  \UTFviii@hexdigit{\numexpr#1\ifnum#1>0-((#1-8)/16)*16\fi\relax}%
+ }%
+ \gdef\UTFviii@hexdigit#1{\ifcase\numexpr#1\relax%
+  0\or1\or2\or3\or4\or5\or6\or7\or8\or9\or A\or B\or C\or D\or E\or F\fi%
+ }%
+ % end of utf8.def inline update
+\fi%
 
 % override to beautify the output, not strictly necessary but requested
 \gdef\UTFviii@splitcsname#1:#2\relax{%
