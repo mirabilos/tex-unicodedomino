@@ -120,6 +120,15 @@
   \the\numexpr\decode@UTFviii#2\relax})%
 }%
 
+% for invalid encoding output
+\gdef\unicodedomino@splith@x#1#2\relax{%
+ \space 0x\UTFviii@hexnumber{`#1}%
+ \ifx\relax#2\relax\else\unicodedomino@splith@x#2\relax\fi%
+}%
+\gdef\unicodedomino@splithex#1:#2\relax{%
+ \unicodedomino@splith@x#2\relax%
+}%
+
 % render the actual domino piece
 \def\unicodedomino@box#1#2{%
  \begingroup%
@@ -214,8 +223,10 @@
    \fi%
   \else%
    % invalid encoding
-   \PackageError{inputenc}{Invalid UTF-8 byte sequence}%
-    {Do ensure the source document is saved in UTF-8 encoding.}%
+   \PackageError{inputenc}{%
+    Invalid\space UTF-8\space byte\space sequence:%
+    \expandafter\unicodedomino@splithex\string#1\relax%
+   }{Do ensure the source document is saved in UTF-8 encoding.}%
   \fi%
  \else%
   % known char, expand
