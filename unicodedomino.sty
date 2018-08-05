@@ -89,31 +89,6 @@
  % end of utf8.def inline update
 \fi%
 
-% missing in utf8.def 2017/01/28 v1.1t (Debian stretch)
-\ifx\UTFviii@checkseq\@undefined%
- \PackageWarning{unicodedomino}{Consider updating utf8.def}%
- % taken from utf8.def 2018/04/05 v1.2c (Debian sid), no claims on this code
- \def\UTFviii@checkseq#1:#2#3{%
-  \ifnum`#2<"80 %
-    \ifx\relax#3\else1\fi
-  \else
-    \ifnum`#2<"C0 %
-      1 %
-    \else
-      \expandafter\expandafter\expandafter\UTFviii@check@continue
-      \expandafter\expandafter\expandafter#3%
-    \fi
-   \fi}
- \def\UTFviii@check@continue#1{%
-   \ifx\relax#1%
-   \else
-   \ifnum`#1<"80 1\else\ifnum`#1>"BF 1\fi\fi
-   \expandafter\UTFviii@check@continue
-   \fi
- }
- % end of utf8.def inline update
-\fi%
-
 % override to beautify the output, not strictly necessary but requested
 \gdef\UTFviii@splitcsname#1:#2\relax{%
  #2 (\expandafter\unicodedomino@codepoint\expandafter{%
@@ -205,7 +180,7 @@
 % main handler
 \def\UTFviii@defined#1{%
  \ifx#1\relax%
-  \if\relax\expandafter\UTFviii@checkseq\string#1\relax\relax%
+  \if\relax\expandafter\UTFviii@chkseq\string#1\empty\relax%
    % unknown char
    \ifx\protect\@typeset@protect%
     % not protected
@@ -231,6 +206,141 @@
  \else%
   % known char, expand
   \expandafter#1%
+ \fi%
+}%
+
+% input validation, better than what’s in utf8.def v1.2c
+\def\UTFviii@chkseq#1:#2#3\empty{%
+ \ifnum`#2<"80 %
+  \ifx\empty#3\empty%
+  \else%
+   1%
+  \fi%
+ \else%
+  \ifnum`#2<"C2 %
+   1%
+  \else%
+   \ifnum`#2<"E0 %
+    % one 80-BF
+    \UTFviii@chksq@onetrail#3\empty%
+   \else%
+    \ifnum`#2<"E1 %
+     % A0-BF + one 80-BF
+     \UTFviii@chksq@a@trail#3\empty%
+    \else%
+     \ifnum`#2<"F0 %
+      % two 80-BF
+      \UTFviii@chksq@twotrail#3\empty%
+     \else%
+      \ifnum`#2<"F1 %
+       % 90-BF + two 80-BF
+       \UTFviii@chksq@ninetytrails#3\empty%
+      \else%
+       \ifnum`#2<"F4 %
+        % three 80-BF
+        \UTFviii@chksq@threetrail#3\empty%
+       \else%
+        \ifnum`#2<"F5 %
+         % 80-8F + two 80-BF
+         \UTFviii@chksq@belowninetytrails#3\empty%
+        \else%
+         1%
+        \fi%
+       \fi%
+      \fi%
+     \fi%
+    \fi%
+   \fi%
+  \fi%
+ \fi%
+}%
+\def\UTFviii@chksq@onetrail#1#2\empty{%
+ \ifx\empty#2\empty%
+  \ifnum`#1<"80 %
+   1%
+  \else%
+   \ifnum`#1<"C0 %
+   \else%
+    1%
+   \fi%
+  \fi%
+ \else%
+  1%
+ \fi%
+}%
+\def\UTFviii@chksq@a@trail#1#2\empty{%
+ \ifx\empty#2\empty%
+  1%
+ \else%
+  \ifnum`#1<"A0 %
+   1%
+  \else%
+   \ifnum`#1<"C0 %
+    \UTFviii@chksq@onetrail#2\empty%
+   \else%
+    1%
+   \fi%
+  \fi%
+ \fi%
+}%
+\def\UTFviii@chksq@twotrail#1#2\empty{%
+ \ifx\empty#2\empty%
+  1%
+ \else%
+  \ifnum`#1<"80 %
+   1%
+  \else%
+   \ifnum`#1<"C0 %
+    \UTFviii@chksq@onetrail#2\empty%
+   \else%
+    1%
+   \fi%
+  \fi%
+ \fi%
+}%
+\def\UTFviii@chksq@ninetytrails#1#2\empty{%
+ \ifx\empty#2\empty%
+  1%
+ \else%
+  \ifnum`#1<"90 %
+   1%
+  \else%
+   \ifnum`#1<"C0 %
+    \UTFviii@chksq@twotrail#2\empty%
+   \else%
+    1%
+   \fi%
+  \fi%
+ \fi%
+}%
+\def\UTFviii@chksq@threetrail#1#2\empty{%
+ \ifx\empty#2\empty%
+  1%
+ \else%
+  \ifnum`#1<"80 %
+   1%
+  \else%
+   \ifnum`#1<"C0 %
+    \UTFviii@chksq@twotrail#2\empty%
+   \else%
+    1%
+   \fi%
+  \fi%
+ \fi%
+}%
+\def\UTFviii@chksq@belowninetytrails#1#2\empty{%
+ \ifx\empty#2\empty%
+  1%
+ \else%
+  \ifnum`#1<"80 %
+   1%
+  \else%
+   \ifnum`#1<"90 %
+    \UTFviii@chksq@twotrail#2\empty%
+   \else%
+    1%
+   \fi%
+  \fi%
  \fi%
 }%
 
