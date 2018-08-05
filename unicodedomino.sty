@@ -28,7 +28,7 @@
 % makes all UTF-8 available in listings.
 
 \NeedsTeXFormat{LaTeX2e}%
-\ProvidesPackage{unicodedomino}[2018/08/05 1.4~ Domino for unknown codepoints]%
+\ProvidesPackage{unicodedomino}[2018/08/05 1.4 Domino for unknown codepoints]%
 \makeatletter%
 
 \ifx\numexpr\@undefined%
@@ -83,11 +83,12 @@
 
 % main handler
 \def\UTFviii@defined#1{%
- \ifx#1\relax%
-  \if\relax\expandafter\UTFviii@checkseq\string#1\empty\relax%
-   % unknown character but valid codepoint
-   \ifx\protect\@typeset@protect%
-    % not protected, replace by domino
+ \ifx\protect\@typeset@protect%
+  % not protected
+  \ifx#1\relax%
+   % unknown character
+   \if\relax\expandafter\UTFviii@checkseq\string#1\empty\relax%
+    % valid codepoint / multibyte sequence
     \PackageWarning{inputenc}{%
      Unicode character \expandafter\UTFviii@splitcsname\string#1\relax\space%
      not set up for use\MessageBreak with LaTeX, replacing%
@@ -96,19 +97,18 @@
     % with the string “, replacing” added at the end
     \expandafter\unicodedomino@domino\string#1\relax%
    \else%
-    % protected, just write the original character
-    \expandafter\@gobblefour\string#1%
+    % invalid multibyte character
+    \PackageError{inputenc}{Invalid UTF-8 byte sequence:%
+     \expandafter\UTFviii@splitseq\string#1\relax}%
+     \UTFviii@invalid@help
    \fi%
   \else%
-%: https://github.com/latex3/latex2e/pull/62
-   \PackageError{inputenc}{Invalid UTF-8 byte sequence:%
-    \expandafter\UTFviii@splitseq\string#1\relax}%
-    \UTFviii@invalid@help
+   % known character, expand
+   \expandafter#1%
   \fi%
  \else%
-  % known character, expand
-  %XXX perhaps do not expand it when protected?
-  \expandafter#1%
+  % protected, just write the original multibyte character
+  \expandafter\@gobblefour\string#1%
  \fi%
 }%
 
