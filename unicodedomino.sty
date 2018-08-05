@@ -1,6 +1,6 @@
 % -*- mode: tex -*-
 %-
-% Copyright © 2017
+% Copyright © 2017, 2018
 %	mirabilos <t.glaser@tarent.de>
 % with contributions by (among others)
 %	David Carlisle <http://tex.stackexchange.com/users/1090>
@@ -24,7 +24,7 @@
 % encountering characters not set up with newunicodechar.
 
 \NeedsTeXFormat{LaTeX2e}%
-\ProvidesPackage{unicodedomino}[2017/02/19 1.1 Domino for unknown codepoints]%
+\ProvidesPackage{unicodedomino}[2018/08/05 1.2~ Domino for unknown codepoints]%
 \makeatletter%
 
 \ifx\numexpr\@undefined%
@@ -137,6 +137,38 @@
  }%
 }%
 
+% retrieve the last octet (lstlistings compatibility)
+\def\unicodedomino@last#1{%
+ \expandafter\unicodedomino@l@st#1\empty\empty\empty%
+}%
+\def\unicodedomino@l@st#1#2#3\empty{%
+ \ifx#2\empty%
+  #1%
+ \else%
+  \unicodedomino@l@st#2#3\empty\empty%
+ \fi%
+}%
+
+% handle trimmed octets
+\def\unicodedomino@octets#1\empty{%
+ \expandafter\UTFviii@defined\csname u8:#1\endcsname%
+}%
+
+% collect octet tokens, trim them, pass on to handler
+\long\def\UTFviii@two@octets#1#2{%
+ \edef\temp{#1\unicodedomino@last{\string#2}}%
+ \expandafter\unicodedomino@octets\temp\empty%
+}%
+\long\def\UTFviii@three@octets#1#2#3{%
+ \edef\temp{#1\unicodedomino@last{\string#2}\unicodedomino@last{\string#3}}%
+ \expandafter\unicodedomino@octets\temp\empty%
+}%
+\long\def\UTFviii@four@octets#1#2#3#4{%
+ \edef\temp{#1\unicodedomino@last{\string#2}\unicodedomino@last{\string#3}\unicodedomino@last{\string#4}}%
+ \expandafter\unicodedomino@octets\temp\empty%
+}%
+
+% main handler
 \def\UTFviii@defined#1{%
  \ifx#1\relax%
   % unknown char
