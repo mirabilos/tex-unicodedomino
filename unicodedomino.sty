@@ -38,6 +38,14 @@
  \PackageError{unicodedomino}{This package requires UTF-8 input encoding}%
 \fi%
 
+% patch up bug in utf8.def that forbade 0xF4 lead byte
+\begingroup%
+\catcode`\~13
+\uccode`\~"F4
+\def\UTFviii@tmp{\xdef~{\noexpand\UTFviii@four@octets\string~}}%
+\uppercase\expandafter{\UTFviii@tmp}%
+\endgroup%
+
 % nicer printing of codepoint hex numbers, not strictly necessary
 \def\unicodedomino@codepoint#1{%
  \ifnum#1>1048575%
