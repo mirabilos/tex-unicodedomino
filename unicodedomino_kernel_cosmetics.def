@@ -20,20 +20,26 @@
 %
 % This file is dual-licenced under the LPPL version 1.3c or later.
 %-
-% Improve error and warning formatting.
+% Improve error and warning formatting. Fully submitted upstream.
 
 %: https://github.com/latex3/latex2e/pull/62
-% format a number as two-digit hex
 \ifx\UTFviii@hexbyte\@undefined%
+ % format a number as two-digit hex
  \def\UTFviii@hexbyte#1{%
   \ifnum#1<16 0\fi%
   \UTFviii@hexnumber{#1}%
  }%
+
+ % override message to give the byte in hex
+ \def\UTFviii@invalid@err#1{%
+  \PackageError{inputenc}{Invalid UTF-8 byte "\UTFviii@hexbyte{`#1}}%
+   \UTFviii@invalid@help%
+ }%
 \fi%
 
 %: https://github.com/latex3/latex2e/pull/63
-% format a number as Unicode codepoint hex
 \ifx\UTFviii@hexcodepoint\@undefined%
+ % format a number as Unicode codepoint hex
  \def\UTFviii@hexcodepoint#1{%
   \ifnum#1<16 U+000%
   \else\ifnum#1<256 U+00%
@@ -43,6 +49,12 @@
   \else U-00%
   \fi\fi\fi\fi\fi%
   \UTFviii@hexnumber{#1}%
+ }%
+
+ % override message to format the codepoint correctly
+ \gdef\UTFviii@splitcsname#1:#2\relax{%
+  #2 (\expandafter\UTFviii@hexcodepoint\expandafter{%
+   \the\numexpr\decode@UTFviii#2\relax})%
  }%
 \fi%
 
@@ -59,17 +71,3 @@
   \ifx\relax#2\relax\else\UTFviii@hexseq#2\relax\fi%
  }%
 \fi%
-
-%: https://github.com/latex3/latex2e/pull/62
-% override message to give the byte in hex
-\def\UTFviii@invalid@err#1{%
- \PackageError{inputenc}{Invalid UTF-8 byte "\UTFviii@hexbyte{`#1}}%
-  \UTFviii@invalid@help%
-}%
-
-%: https://github.com/latex3/latex2e/pull/63
-% override message to format the codepoint correctly
-\gdef\UTFviii@splitcsname#1:#2\relax{%
- #2 (\expandafter\UTFviii@hexcodepoint\expandafter{%
-  \the\numexpr\decode@UTFviii#2\relax})%
-}%
