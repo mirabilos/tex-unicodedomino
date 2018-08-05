@@ -43,25 +43,8 @@
   {You will need Debian stretch or newer}%
 \fi%
 
-% patch up bug in utf8.def that forbade 0xF4 lead byte
-\begingroup%
-\catcode`\~13
-\uccode`\~"F4
-\def\UTFviii@tmp{\xdef~{\noexpand\UTFviii@four@octets\string~}}%
-\uppercase\expandafter{\UTFviii@tmp}%
-\endgroup%
-
-% now fixup to disallow too large definitions
-\let\unicodedomino@parse@XML@charref\parse@XML@charref%
-\gdef\parse@XML@charref{%
- \ifnum\count@>"10FFFF\relax%
-  \PackageError{inputenc}{%
-   Cannot define Unicode char value\space%
-   \unicodedomino@shex\the\count@\relax\space (too large)%
-  }%
- \fi%
- \unicodedomino@parse@XML@charref%
-}%
+% pull code from other files
+\input{unicodedomino_kernel_fixup.def}%
 
 % nicer printing of codepoint hex numbers, not strictly necessary
 \def\unicodedomino@codepoint#1{%
@@ -84,14 +67,6 @@
 % same for bytes
 \def\unicodedomino@bytehex#1{%
  \expandafter\UTFviii@hexdigit\expandafter{\the\numexpr(#1-8)/16\relax}%
- \UTFviii@hexdigit{\numexpr#1\ifnum#1>0-((#1-8)/16)*16\fi\relax}%
-}%
-
-% and arbitrary numbers
-\def\unicodedomino@shex#1\relax{%
- \ifnum#1>15 %
-  \expandafter\unicodedomino@shex\expandafter\the\numexpr(#1-8)/16\relax%
- \fi%
  \UTFviii@hexdigit{\numexpr#1\ifnum#1>0-((#1-8)/16)*16\fi\relax}%
 }%
 
@@ -220,95 +195,6 @@
  \else%
   % known char, expand
   \expandafter#1%
- \fi%
-}%
-
-% input validation, including security-relevant checks
-\def\UTFviii@checkseq#1:#2#3\empty{%
- \ifnum`#2<"80 %
-  \ifx\empty#3\empty%
-  \else%
-   1%
-  \fi%
- \else%
-  \ifnum`#2<"C2 %
-   1%
-  \else%
-   \ifnum`#2<"E0 %
-    % one 80-BF
-    \UTFviii@check@one#3\empty%
-   \else%
-    \ifnum`#2<"E1 %
-     % A0-BF + one 80-BF
-     \UTFviii@check@two"A0.#3\empty%
-    \else%
-     \ifnum`#2<"F0 %
-      % two 80-BF
-      \UTFviii@check@two"80.#3\empty%
-     \else%
-      \ifnum`#2<"F1 %
-       % 90-BF + two 80-BF
-       \UTFviii@check@three"90."BF.#3\empty%
-      \else%
-       \ifnum`#2<"F4 %
-        % three 80-BF
-        \UTFviii@check@three"80."BF.#3\empty%
-       \else%
-        \ifnum`#2<"F5 %
-         % 80-8F + two 80-BF
-         \UTFviii@check@three"80."8F.#3\empty%
-        \else%
-         1%
-        \fi%
-       \fi%
-      \fi%
-     \fi%
-    \fi%
-   \fi%
-  \fi%
- \fi%
-}%
-\def\UTFviii@check@one#1#2\empty{%
- \ifx\empty#2\empty%
-  \ifnum`#1<"80 %
-   1%
-  \else%
-   \ifnum`#1>"BF %
-    1%
-   \fi%
-  \fi%
- \else%
-  1%
- \fi%
-}%
-\def\UTFviii@check@two#1.#2#3\empty{%
- \ifx\empty#3\empty%
-  1%
- \else%
-  \ifnum`#2<#1 %
-   1%
-  \else%
-   \ifnum`#2>"BF %
-    1%
-   \else%
-    \UTFviii@check@one#3\empty%
-   \fi%
-  \fi%
- \fi%
-}%
-\def\UTFviii@check@three#1.#2.#3#4\empty{%
- \ifx\empty#4\empty%
-  1%
- \else%
-  \ifnum`#3<#1 %
-   1%
-  \else%
-   \ifnum`#3>#2 %
-    1%
-   \else%
-    \UTFviii@check@two"80.#4\empty%
-   \fi%
-  \fi%
  \fi%
 }%
 

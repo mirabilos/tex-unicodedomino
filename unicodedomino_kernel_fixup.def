@@ -1,0 +1,142 @@
+% -*- mode: tex -*-
+%-
+% Copyright © 2018
+%	mirabilos <m@mirbsd.org>
+%
+% Provided that these terms and disclaimer and all copyright notices
+% are retained or reproduced in an accompanying document, permission
+% is granted to deal in this work without restriction, including un‐
+% limited rights to use, publicly perform, distribute, sell, modify,
+% merge, give away, or sublicence.
+%
+% This work is provided “AS IS” and WITHOUT WARRANTY of any kind, to
+% the utmost extent permitted by applicable law, neither express nor
+% implied; without malicious intent or gross negligence. In no event
+% may a licensor, author or contributor be held liable for indirect,
+% direct, other damage, loss, or other issues arising in any way out
+% of dealing in the work, even if advised of the possibility of such
+% damage or existence of a defect, except proven that it results out
+% of said person’s immediate fault when using the work as intended.
+%
+% This file is dual-licenced under the LPPL version 1.3c or later.
+%-
+% Fix check for illegal sequences to fail overlong encoded sequences
+% as well as codepoints outside of the Unicode range [0;10FFFF]. Add
+% 0xF4 to the list of permitted lead octets.
+
+% run the fixup code only if necessary {{{ begin
+\ifx\UTFviii@check@three\@undefined%
+
+% new check for illegal sequences
+\def\UTFviii@checkseq#1:#2#3\empty{%
+ \ifnum`#2<"80 %
+  \ifx\empty#3\empty%
+  \else%
+   1%
+  \fi%
+ \else%
+  \ifnum`#2<"C2 %
+   1%
+  \else%
+   \ifnum`#2<"E0 %
+    % one 80-BF
+    \UTFviii@check@one#3\empty%
+   \else%
+    \ifnum`#2<"E1 %
+     % A0-BF + one 80-BF
+     \UTFviii@check@two"A0.#3\empty%
+    \else%
+     \ifnum`#2<"F0 %
+      % two 80-BF
+      \UTFviii@check@two"80.#3\empty%
+     \else%
+      \ifnum`#2<"F1 %
+       % 90-BF + two 80-BF
+       \UTFviii@check@three"90."BF.#3\empty%
+      \else%
+       \ifnum`#2<"F4 %
+        % three 80-BF
+        \UTFviii@check@three"80."BF.#3\empty%
+       \else%
+        \ifnum`#2<"F5 %
+         % 80-8F + two 80-BF
+         \UTFviii@check@three"80."8F.#3\empty%
+        \else%
+         1%
+        \fi%
+       \fi%
+      \fi%
+     \fi%
+    \fi%
+   \fi%
+  \fi%
+ \fi%
+}%
+\def\UTFviii@check@one#1#2\empty{%
+ \ifx\empty#2\empty%
+  \ifnum`#1<"80 %
+   1%
+  \else%
+   \ifnum`#1>"BF %
+    1%
+   \fi%
+  \fi%
+ \else%
+  1%
+ \fi%
+}%
+\def\UTFviii@check@two#1.#2#3\empty{%
+ \ifx\empty#3\empty%
+  1%
+ \else%
+  \ifnum`#2<#1 %
+   1%
+  \else%
+   \ifnum`#2>"BF %
+    1%
+   \else%
+    \UTFviii@check@one#3\empty%
+   \fi%
+  \fi%
+ \fi%
+}%
+\def\UTFviii@check@three#1.#2.#3#4\empty{%
+ \ifx\empty#4\empty%
+  1%
+ \else%
+  \ifnum`#3<#1 %
+   1%
+  \else%
+   \ifnum`#3>#2 %
+    1%
+   \else%
+    \UTFviii@check@two"80.#4\empty%
+   \fi%
+  \fi%
+ \fi%
+}%
+
+% bugfix: disallow too large definitions
+\let\unicodedomino@parse@XML@charref\parse@XML@charref%
+\gdef\parse@XML@charref{%
+ \ifnum\count@>"10FFFF\relax%
+  \PackageError{inputenc}{%
+   Cannot define Unicode char value\space%
+   \UTFviii@hexnumber\count@\space%
+   (too large)%
+  }%
+ \fi%
+ \unicodedomino@parse@XML@charref%
+}%
+
+% bugfix: add 0xF4 to the list of permitted lead octets
+% (needs the above fix)
+\begingroup%
+\catcode`\~13
+\uccode`\~"F4
+\def\UTFviii@tmp{\xdef~{\noexpand\UTFviii@four@octets\string~}}%
+\uppercase\expandafter{\UTFviii@tmp}%
+\endgroup%
+
+% run the fixup code only if necessary }}} end
+\fi%
