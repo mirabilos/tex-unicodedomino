@@ -46,6 +46,18 @@
 \uppercase\expandafter{\UTFviii@tmp}%
 \endgroup%
 
+% now fixup to disallow too large definitions
+\let\unicodedomino@parse@XML@charref\parse@XML@charref%
+\gdef\parse@XML@charref{%
+ \ifnum\count@>"10FFFF\relax%
+  \PackageError{inputenc}{%
+   Cannot define Unicode char value\space%
+   \unicodedomino@shex\the\count@\relax\space (too large)%
+  }%
+ \fi%
+ \unicodedomino@parse@XML@charref%
+}%
+
 % nicer printing of codepoint hex numbers, not strictly necessary
 \def\unicodedomino@codepoint#1{%
  \ifnum#1>1048575%
@@ -65,6 +77,14 @@
 % same for bytes
 \def\unicodedomino@bytehex#1{%
  \expandafter\UTFviii@hexdigit\expandafter{\the\numexpr(#1-8)/16\relax}%
+ \UTFviii@hexdigit{\numexpr#1\ifnum#1>0-((#1-8)/16)*16\fi\relax}%
+}%
+
+% and arbitrary numbers
+\def\unicodedomino@shex#1\relax{%
+ \ifnum#1>15 %
+  \expandafter\unicodedomino@shex\expandafter\the\numexpr(#1-8)/16\relax%
+ \fi%
  \UTFviii@hexdigit{\numexpr#1\ifnum#1>0-((#1-8)/16)*16\fi\relax}%
 }%
 
