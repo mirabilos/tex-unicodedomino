@@ -22,6 +22,7 @@
 %-
 % Improve error and warning formatting.
 
+%: https://github.com/latex3/latex2e/pull/62
 % format a number as two-digit hex
 \ifx\UTFviii@hexbyte\@undefined%
  \def\UTFviii@hexbyte#1{%
@@ -59,7 +60,7 @@
  }%
 \fi%
 
-%: https://github.com/latex3/latex2e/pull/61
+%: https://github.com/latex3/latex2e/pull/62
 % override message to give the byte in hex
 \def\UTFviii@invalid@err#1{%
  \PackageError{inputenc}{Invalid UTF-8 byte "\UTFviii@hexbyte{`#1}}%
