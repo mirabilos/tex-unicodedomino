@@ -1,6 +1,8 @@
 % -*- mode: tex -*-
 %-
-% Copyright © 2017, 2018
+% Copyright © 2018
+%	mirabilos <m@mirbsd.org>
+% Copyright © 2017
 %	mirabilos <t.glaser@tarent.de>
 % with contributions by (among others)
 %	David Carlisle <http://tex.stackexchange.com/users/1090>
@@ -21,7 +23,9 @@
 % of said person’s immediate fault when using the work as intended.
 %-
 % Change UTF-8 input encoding to not error out, but substitute, upon
-% encountering characters not set up with newunicodechar.
+% encountering characters not set up with newunicodechar. Also fixes
+% decoding to error out on overlong encoded characters, and (likely)
+% makes all UTF-8 available in listings.
 
 \NeedsTeXFormat{LaTeX2e}%
 \ProvidesPackage{unicodedomino}[2018/08/05 1.2~ Domino for unknown codepoints]%
@@ -166,7 +170,7 @@
  \fi%
 }%
 
-% input validation, better than what’s in utf8.def v1.2c
+% input validation, including security-relevant checks
 \def\UTFviii@chkseq#1:#2#3\empty{%
  \ifnum`#2<"80 %
   \ifx\empty#3\empty%
@@ -301,5 +305,6 @@
  \fi%
 }%
 
+% clean up after ourselves
 \makeatother%
 \endinput
