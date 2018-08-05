@@ -22,7 +22,7 @@
 %-
 % Fix check for illegal sequences to fail overlong encoded sequences
 % as well as codepoints outside of the Unicode range [0;10FFFF]. Add
-% 0xF4 to the list of permitted lead octets.
+% "F4 to the list of permitted lead octets.
 
 % run the fixup code only if necessary {{{ begin
 \ifx\UTFviii@check@three\@undefined%
@@ -129,7 +129,7 @@
  \unicodedomino@parse@XML@charref%
 }%
 
-% bugfix: add 0xF4 to the list of permitted lead octets
+% bugfix: add "F4 to the list of permitted lead octets
 % (needs the above fix)
 \begingroup%
 \catcode`\~13

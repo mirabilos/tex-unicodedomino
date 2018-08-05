@@ -51,7 +51,7 @@
  }%
  \gdef\UTFviii@hexseq#1#2\relax{%
   % display first octet
-  \space 0x\UTFviii@hexbyte{`#1}%
+  \space "\UTFviii@hexbyte{`#1}%
   % recursively handle remaining octets
   \ifx\relax#2\relax\else\UTFviii@hexseq#2\relax\fi%
  }%
@@ -59,7 +59,7 @@
 
 % override message to give the byte in hex
 \def\UTFviii@invalid@err#1{%
- \PackageError{inputenc}{Invalid UTF-8 byte 0x\UTFviii@hexbyte{`#1}}%
+ \PackageError{inputenc}{Invalid UTF-8 byte "\UTFviii@hexbyte{`#1}}%
   \UTFviii@invalid@help%
 }%
 
