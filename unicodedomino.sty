@@ -54,10 +54,21 @@
  \expandafter\UTFviii@hexnumber\expandafter{#1}%
 }%
 
+% same for bytes
+\def\unicodedomino@bytehex#1{%
+ \expandafter\UTFviii@hexdigit\expandafter{\the\numexpr(#1-8)/16\relax}%
+ \UTFviii@hexdigit{\numexpr#1\ifnum#1>0-((#1-8)/16)*16\fi\relax}%
+}%
+
 % override to beautify the output, not strictly necessary but requested
 \gdef\UTFviii@splitcsname#1:#2\relax{%
  #2 (\expandafter\unicodedomino@codepoint\expandafter{%
   \the\numexpr\decode@UTFviii#2\relax})%
+}%
+\def\UTFviii@invalid@err#1{%
+ \PackageError{inputenc}{%
+  Invalid UTF-8 byte 0x\unicodedomino@bytehex{\number`#1}%
+ }\UTFviii@invalid@help%
 }%
 
 % for invalid encoding output
