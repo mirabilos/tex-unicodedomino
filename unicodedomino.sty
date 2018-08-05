@@ -89,6 +89,31 @@
  % end of utf8.def inline update
 \fi%
 
+% missing in utf8.def 2017/01/28 v1.1t (Debian stretch)
+\ifx\UTFviii@checkseq\@undefined%
+ \PackageWarning{unicodedomino}{Consider updating utf8.def}%
+ % taken from utf8.def 2018/04/05 v1.2c (Debian sid), no claims on this code
+ \def\UTFviii@checkseq#1:#2#3{%
+  \ifnum`#2<"80 %
+    \ifx\relax#3\else1\fi
+  \else
+    \ifnum`#2<"C0 %
+      1 %
+    \else
+      \expandafter\expandafter\expandafter\UTFviii@check@continue
+      \expandafter\expandafter\expandafter#3%
+    \fi
+   \fi}
+ \def\UTFviii@check@continue#1{%
+   \ifx\relax#1%
+   \else
+   \ifnum`#1<"80 1\else\ifnum`#1>"BF 1\fi\fi
+   \expandafter\UTFviii@check@continue
+   \fi
+ }
+ % end of utf8.def inline update
+\fi%
+
 % override to beautify the output, not strictly necessary but requested
 \gdef\UTFviii@splitcsname#1:#2\relax{%
  #2 (\expandafter\unicodedomino@codepoint\expandafter{%
