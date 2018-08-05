@@ -68,9 +68,11 @@
   U+%
  \else\ifnum#1>255%
   U+0%
- \else%
+ \else\ifnum#1>15%
   U+00%
- \fi\fi\fi\fi%
+ \else%
+  U+000%
+ \fi\fi\fi\fi\fi%
  \expandafter\UTFviii@hexnumber\expandafter{#1}%
 }%
 
@@ -130,6 +132,7 @@
  \ifnum#1<65536 0.\fi%
  \ifnum#1<4096 0.\fi%
  \ifnum#1<256 0.\fi%
+ \ifnum#1<16 0.\fi%
  \expandafter\unicodedomino@hex@ne\expandafter{#1}%
 }%
 % call the appropriate box function
