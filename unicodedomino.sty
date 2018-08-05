@@ -98,6 +98,7 @@
     \expandafter\@gobblefour\string#1%
    \fi%
   \else%
+%: https://github.com/latex3/latex2e/pull/62
    \PackageError{inputenc}{Invalid UTF-8 byte sequence:%
     \expandafter\UTFviii@splitseq\string#1\relax}%
     \UTFviii@invalid@help

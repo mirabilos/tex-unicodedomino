@@ -27,6 +27,7 @@
 % run the fixup code only if necessary {{{ begin
 \ifx\UTFviii@check@three\@undefined%
 
+%: not forwarded yet, will only do so once PR#60 (see below) is in
 % new check for illegal sequences
 \def\UTFviii@checkseq#1:#2#3\empty{%
  \ifnum`#2<"80 %
@@ -116,6 +117,7 @@
  \fi%
 }%
 
+%: https://github.com/latex3/latex2e/pull/60
 % bugfix: disallow too large definitions
 \let\unicodedomino@parse@XML@charref\parse@XML@charref%
 \gdef\parse@XML@charref{%
@@ -129,6 +131,7 @@
  \unicodedomino@parse@XML@charref%
 }%
 
+%: https://github.com/latex3/latex2e/pull/60
 % bugfix: add "F4 to the list of permitted lead octets
 % (needs the above fix)
 \begingroup%

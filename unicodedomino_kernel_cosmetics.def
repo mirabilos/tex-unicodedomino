@@ -30,6 +30,7 @@
  }%
 \fi%
 
+%: https://github.com/latex3/latex2e/pull/63
 % format a number as Unicode codepoint hex
 \ifx\UTFviii@hexcodepoint\@undefined%
  \def\UTFviii@hexcodepoint#1{%
@@ -44,6 +45,7 @@
  }%
 \fi%
 
+%: https://github.com/latex3/latex2e/pull/62
 % split an invalid byte sequence for output
 \ifx\UTFviii@splitseq\@undefined%
  \gdef\UTFviii@splitseq#1:#2\relax{%
@@ -57,12 +59,14 @@
  }%
 \fi%
 
+%: https://github.com/latex3/latex2e/pull/61
 % override message to give the byte in hex
 \def\UTFviii@invalid@err#1{%
  \PackageError{inputenc}{Invalid UTF-8 byte "\UTFviii@hexbyte{`#1}}%
   \UTFviii@invalid@help%
 }%
 
+%: https://github.com/latex3/latex2e/pull/63
 % override message to format the codepoint correctly
 \gdef\UTFviii@splitcsname#1:#2\relax{%
  #2 (\expandafter\UTFviii@hexcodepoint\expandafter{%
