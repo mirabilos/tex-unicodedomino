@@ -24,9 +24,6 @@
 % as well as codepoints outside of the Unicode range [0;10FFFF]. Add
 % "F4 to the list of permitted lead octets.
 
-% run the fixup code only if necessary {{{ begin
-\ifx\UTFviii@check@three\@undefined%
-
 %: not forwarded yet, will only do so once PR#60 (see below) is in
 % new check for illegal sequences
 \def\UTFviii@checkseq#1:#2#3\empty{%
@@ -140,6 +137,3 @@
 \def\UTFviii@tmp{\xdef~{\noexpand\UTFviii@four@octets\string~}}%
 \uppercase\expandafter{\UTFviii@tmp}%
 \endgroup%
-
-% run the fixup code only if necessary }}} end
-\fi%
