@@ -28,7 +28,7 @@
 % makes all UTF-8 available in listings.
 
 \NeedsTeXFormat{LaTeX2e}%
-\ProvidesPackage{unicodedomino}[2018/08/06 1.5~ Domino for unknown codepoints]%
+\ProvidesPackage{unicodedomino}[2018/08/06 1.5 Domino for unknown codepoints]%
 \makeatletter%
 
 \ifx\numexpr\@undefined%
@@ -36,11 +36,6 @@
 \fi%
 \ifx\UTFviii@defined\@undefined%
  \PackageError{unicodedomino}{This package requires UTF-8 input encoding}%
-\fi%
-\ifx\decode@UTFviii\@undefined%
- \PackageError{unicodedomino}%
-  {Your utf8.def is too old, consider updating it}%
-  {You will need v1.1o 2015/08/28, Debian stretch or newer}%
 \fi%
 
 % pull code from other files
