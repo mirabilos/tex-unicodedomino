@@ -26,7 +26,7 @@
 
 %: not forwarded yet, will only do so once PR#60 (see below) is in
 % new check for illegal sequences
-\def\UTFviii@checkseq#1:#2#3\empty{%
+\gdef\UTFviii@checkseq#1:#2#3\empty{%
  \ifnum`#2<"80 %
   \ifx\empty#3\empty%
   \else%
@@ -70,7 +70,7 @@
   \fi%
  \fi%
 }%
-\def\UTFviii@check@one#1#2\empty{%
+\gdef\UTFviii@check@one#1#2\empty{%
  \ifx\empty#2\empty%
   \ifnum`#1<"80 %
    1%
@@ -83,7 +83,7 @@
   1%
  \fi%
 }%
-\def\UTFviii@check@two#1.#2#3\empty{%
+\gdef\UTFviii@check@two#1.#2#3\empty{%
  \ifx\empty#3\empty%
   1%
  \else%
@@ -98,7 +98,7 @@
   \fi%
  \fi%
 }%
-\def\UTFviii@check@three#1.#2.#3#4\empty{%
+\gdef\UTFviii@check@three#1.#2.#3#4\empty{%
  \ifx\empty#4\empty%
   1%
  \else%
