@@ -2,10 +2,23 @@
 
 \usepackage[utf8]{inputenc}%
 \usepackage[LY1,TS1,T1]{fontenc}%
+\RequirePackage[varqu,varl]{inconsolata}%
+\usepackage{listings}%
 \usepackage{unicodedomino}%
 
 \setlength{\parskip}{0.3cm plus 5mm minus 1mm}%
 \setlength{\parindent}{0cm}%
+
+\lstset{
+	breakatwhitespace=true,
+	basicstyle=\ttfamily,
+	upquote=true,
+	keepspaces,
+	columns=flexible,
+	extendedchars=true,
+	breaklines=true,
+	frame=single,
+}%
 
 \makeatletter%
 \message{:expect 48:\decode@UTFviii0\relax:}%
@@ -41,5 +54,9 @@ bëh
 \section{drëi}
 
 baz
+
+\begin{lstlisting}
+mäh mゐh m💩h miau
+\end{lstlisting}
 
 \end{document}
