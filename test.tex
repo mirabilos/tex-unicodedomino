@@ -4,6 +4,15 @@
 \usepackage[LY1,TS1,T1]{fontenc}%
 \usepackage{unicodedomino}%
 
+\makeatletter%
+\message{:expect 48:\decode@UTFviii0\relax:}%
+\message{:expect 228:\decode@UTFviii ä\relax:}%
+\message{:expect 8364:\decode@UTFviii €\relax:}%
+\message{:expect 128169:\decode@UTFviii 💩\relax:}%
+\edef\temp{\decode@UTFviii1\relax}%
+\message{:detok=\expandafter\detokenize\expandafter{\temp}:\expandafter\detokenize\expandafter{\decode@UTFviii2\relax}:}%
+\makeatother%
+
 \begin{document}
 
 foo
