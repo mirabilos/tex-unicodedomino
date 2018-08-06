@@ -20,6 +20,28 @@
 %-
 % Compatibility code with older utf8.def versions
 
+% added in release 2015/01/01
+\ifx\textsubscript\@undefined%
+ \RequirePackage{fixltx2e}%
+\fi%
+
+% added in v1.1o 2015/08/28
+\ifx\UTFviii@hexnumber\@undefined%
+ % taken from utf8ienc.dtx, no claim on the code but it’s really trivial
+ \gdef\UTFviii@hexnumber#1{%
+  \ifnum#1>15 %
+   \expandafter\UTFviii@hexnumber\expandafter{\the\numexpr(#1-8)/16\relax}%
+  \fi%
+  \UTFviii@hexdigit{\numexpr#1\ifnum#1>0-((#1-8)/16)*16\fi\relax}%
+ }%
+ \gdef\UTFviii@hexdigit#1{%
+  \ifcase\numexpr#1\relax%
+   0\or1\or2\or3\or4\or5\or6\or7\or8\or9\or%
+   A\or B\or C\or D\or E\or F%
+  \fi%
+ }%
+\fi%
+
 % added in v1.2a 2018/03/24
 \ifx\UTFviii@invalid@help\@undefined%
  \def\UTFviii@invalid@help{%
