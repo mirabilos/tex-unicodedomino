@@ -25,7 +25,7 @@
 %: https://github.com/latex3/latex2e/pull/62
 \ifx\UTFviii@hexbyte\@undefined%
  % format a number as two-digit hex
- \def\UTFviii@hexbyte#1{%
+ \gdef\UTFviii@hexbyte#1{%
   \ifnum#1<16 0\fi%
   \UTFviii@hexnumber{#1}%
  }%
@@ -40,7 +40,7 @@
 %: https://github.com/latex3/latex2e/pull/63
 \ifx\UTFviii@hexcodepoint\@undefined%
  % format a number as Unicode codepoint hex
- \def\UTFviii@hexcodepoint#1{%
+ \gdef\UTFviii@hexcodepoint#1{%
   \ifnum#1<16 U+000%
   \else\ifnum#1<256 U+00%
   \else\ifnum#1<4096 U+0%
