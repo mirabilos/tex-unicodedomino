@@ -5,7 +5,7 @@
 %-
 % Improve error and warning formatting. Fully submitted upstream.
 
-%: https://github.com/latex3/latex2e/pull/62
+%: https://github.com/latex3/latex2e/pull/82
 \ifx\UTFviii@hexbyte\@undefined%
  % format a number as two-digit hex
  \gdef\UTFviii@hexbyte#1{%
@@ -42,7 +42,7 @@
  \UTFviii@hexnumber{#1}%
 }%
 
-%: https://github.com/latex3/latex2e/pull/62
+%: https://github.com/latex3/latex2e/pull/62 (rejected)
 % split an invalid byte sequence for output
 \ifx\UTFviii@splitseq\@undefined%
  \gdef\UTFviii@splitseq#1:#2\relax{%
