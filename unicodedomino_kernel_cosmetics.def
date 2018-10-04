@@ -22,25 +22,25 @@
 
 %: merged
 \ifx\UTFviii@hexcodepoint\@undefined%
- %: reverted partially, need to override
- % format a number as Unicode codepoint hex
- \gdef\UTFviii@hexcodepoint#1{%
-  \ifnum#1<16 U+000%
-  \else\ifnum#1<256 U+00%
-  \else\ifnum#1<4096 U+0%
-  \else\ifnum#1<65536 U+%
-  \else\ifnum#1<1048576 U-000%
-  \else U-00%
-  \fi\fi\fi\fi\fi%
-  \UTFviii@hexnumber{#1}%
- }%
-
  % override message to format the codepoint correctly
  \gdef\UTFviii@splitcsname#1:#2\relax{%
   #2 (\expandafter\UTFviii@hexcodepoint\expandafter{%
    \the\numexpr\decode@UTFviii#2\relax})%
  }%
 \fi%
+
+%: reverted partially, override bogus definition
+% format a number as Unicode codepoint hex
+\gdef\UTFviii@hexcodepoint#1{%
+ \ifnum#1<16 U+000%
+ \else\ifnum#1<256 U+00%
+ \else\ifnum#1<4096 U+0%
+ \else\ifnum#1<65536 U+%
+ \else\ifnum#1<1048576 U-000%
+ \else U-00%
+ \fi\fi\fi\fi\fi%
+ \UTFviii@hexnumber{#1}%
+}%
 
 %: https://github.com/latex3/latex2e/pull/62
 % split an invalid byte sequence for output
