@@ -20,15 +20,6 @@
  }%
 \fi%
 
-%: merged
-\ifx\UTFviii@hexcodepoint\@undefined%
- % override message to format the codepoint correctly
- \gdef\UTFviii@splitcsname#1:#2\relax{%
-  #2 (\expandafter\UTFviii@hexcodepoint\expandafter{%
-   \the\numexpr\decode@UTFviii#2\relax})%
- }%
-\fi%
-
 %: reverted partially, override bogus definition
 % format a number as Unicode codepoint hex
 \gdef\UTFviii@hexcodepoint#1{%
