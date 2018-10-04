@@ -7,7 +7,7 @@
 % as well as codepoints outside of the Unicode range [0;10FFFF]. Add
 % "F4 to the list of permitted lead octets.
 
-%: not forwarded yet, will only do so once PR#60 (see below) is in
+%: not forwarded yet, need to do so now (plus unicodedomino_kernel_better_decode.def which is its user)
 % new check for illegal sequences
 \gdef\UTFviii@checkseq#1:#2#3\empty{%
  \ifnum`#2<"80 %
@@ -97,7 +97,7 @@
  \fi%
 }%
 
-%: https://github.com/latex3/latex2e/pull/60
+%: fixed upstream
 % bugfix: disallow too large definitions
 \let\unicodedomino@parse@XML@charref\parse@XML@charref%
 \gdef\parse@XML@charref{%
@@ -111,7 +111,7 @@
  \unicodedomino@parse@XML@charref%
 }%
 
-%: https://github.com/latex3/latex2e/pull/60
+%: also merged
 % bugfix: add "F4 to the list of permitted lead octets
 % (needs the above fix)
 \begingroup%
