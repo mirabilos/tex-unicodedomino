@@ -3,7 +3,7 @@
 % See unicodedomino.sty for copyright and licence terms. Furthermore
 % this file is dual-licenced under the LPPL version 1.3c or later.
 %-
-% Improve error and warning formatting. Fully submitted upstream.
+% Improve error and warning formatting.
 
 %: https://github.com/latex3/latex2e/pull/82
 \ifx\UTFviii@hexbyte\@undefined%
