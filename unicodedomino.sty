@@ -96,6 +96,17 @@
  \expandafter\UTFviii@defined\csname u8:#1\endcsname%
 }%
 
+% split an invalid byte sequence for error output
+\gdef\unicodedomino@splitseq#1:#2\relax{%
+ \unicodedomino@hexseq#2\relax%
+}%
+\gdef\unicodedomino@hexseq#1#2\relax{%
+ % display first octet
+ \space "\UTFviii@hexbyte{`#1}%
+ % recursively handle remaining octets
+ \ifx\relax#2\relax\else\unicodedomino@hexseq#2\relax\fi%
+}%
+
 % main handler
 \def\UTFviii@defined#1{%
  \ifx#1\relax%
@@ -112,7 +123,7 @@
   \else%
    % invalid multibyte character
    \PackageError{inputenc}{Invalid UTF-8 byte sequence:%
-    \expandafter\UTFviii@splitseq\string#1\relax}%
+    \expandafter\unicodedomino@splitseq\string#1\relax}%
     \UTFviii@invalid@help
   \fi%
  \else%

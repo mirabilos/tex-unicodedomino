@@ -20,8 +20,7 @@
  }%
 \fi%
 
-%: reverted partially, override bogus definition
-% format a number as Unicode codepoint hex
+% override to format a hex Unicode codepoint correctly
 \gdef\UTFviii@hexcodepoint#1{%
  \ifnum#1<16 U+000%
  \else\ifnum#1<256 U+00%
@@ -32,17 +31,3 @@
  \fi\fi\fi\fi\fi%
  \UTFviii@hexnumber{#1}%
 }%
-
-%: https://github.com/latex3/latex2e/pull/62 (rejected)
-% split an invalid byte sequence for output
-\ifx\UTFviii@splitseq\@undefined%
- \gdef\UTFviii@splitseq#1:#2\relax{%
-  \UTFviii@hexseq#2\relax%
- }%
- \gdef\UTFviii@hexseq#1#2\relax{%
-  % display first octet
-  \space "\UTFviii@hexbyte{`#1}%
-  % recursively handle remaining octets
-  \ifx\relax#2\relax\else\UTFviii@hexseq#2\relax\fi%
- }%
-\fi%

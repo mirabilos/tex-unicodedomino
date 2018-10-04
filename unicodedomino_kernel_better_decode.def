@@ -5,6 +5,7 @@
 %-
 % Improved Unicode decoding using the fixed-up checkseq code.
 
+%: entire file (plus UTFviii@checkseq) not submitted yet
 % override stock function, calling safer decode below
 \gdef\decode@UTFviii#1\relax{%
  \the\numexpr(\UTFviii@decode0:#1\relax)%
