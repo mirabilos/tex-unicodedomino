@@ -38,6 +38,9 @@
  \PackageError{unicodedomino}{This package requires UTF-8 input encoding}%
 \fi%
 
+% pull compatibility code for users of older base/utf8ienc.dtx
+\input{unicodedomino_compat.def}%
+
 % pull code from other files
 \ifx\UTFviii@check@three\@undefined%
  \input{unicodedomino_kernel_fixup_f4_and_checkseq.def}%
@@ -46,7 +49,6 @@
  \input{unicodedomino_kernel_better_decode.def}%
 \fi%
 \input{unicodedomino_kernel_cosmetics.def}%
-\input{unicodedomino_compat.def}%
 
 % retrieve the last octet
 \def\unicodedomino@last#1{%
