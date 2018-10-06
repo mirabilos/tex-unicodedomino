@@ -102,9 +102,14 @@
 }%
 \gdef\unicodedomino@hexseq#1#2\relax{%
  % display first octet
- \space "\UTFviii@hexbyte{`#1}%
+ \space "\unicodedomino@hexbyte{`#1}%
  % recursively handle remaining octets
  \ifx\relax#2\relax\else\unicodedomino@hexseq#2\relax\fi%
+}%
+% format a number as two-digit hex
+\gdef\unicodedomino@hexbyte#1{%
+ \ifnum#1<16 0\fi%
+ \UTFviii@hexnumber{#1}%
 }%
 
 % main handler
