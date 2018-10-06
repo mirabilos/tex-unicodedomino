@@ -7,7 +7,7 @@
 % as well as codepoints outside of the Unicode range [0;10FFFF]. Add
 % "F4 to the list of permitted lead octets.
 
-%: not forwarded yet, need to do so now (plus unicodedomino_kernel_better_decode.def which is its user)
+%: https://github.com/latex3/latex2e/pull/83
 % new check for illegal sequences
 \gdef\UTFviii@checkseq#1:#2#3\empty{%
  \ifnum`#2<"80 %

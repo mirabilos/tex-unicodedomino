@@ -5,7 +5,7 @@
 %-
 % Improve error and warning formatting.
 
-%: merged
+%: merged, but ifx yet to see
 \ifx\UTFviii@check@three\@undefined%
  % override message to give the byte in hex
  \def\UTFviii@invalid@err#1{%
