@@ -5,11 +5,11 @@
 %-
 % Improve error and warning formatting.
 
-%: https://github.com/latex3/latex2e/pull/82 (accepted)
-\ifx\unicodedomino@hexbyte\@undefined%
+%: merged
+\ifx\UTFviii@check@three\@undefined%
  % override message to give the byte in hex
  \def\UTFviii@invalid@err#1{%
-  \PackageError{inputenc}{Invalid UTF-8 byte "\unicodedomino@hexbyte{`#1}}%
+  \PackageError{inputenc}{Invalid UTF-8 byte "\UTFviii@hexnumber{`#1}}%
    \UTFviii@invalid@help%
  }%
 \fi%
