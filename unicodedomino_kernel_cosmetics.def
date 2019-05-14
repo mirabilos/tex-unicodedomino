@@ -1,73 +1,27 @@
 % -*- mode: tex -*-
 %-
-% Copyright © 2017, 2018
-%	mirabilos <m@mirbsd.org>
-%
-% Provided that these terms and disclaimer and all copyright notices
-% are retained or reproduced in an accompanying document, permission
-% is granted to deal in this work without restriction, including un‐
-% limited rights to use, publicly perform, distribute, sell, modify,
-% merge, give away, or sublicence.
-%
-% This work is provided “AS IS” and WITHOUT WARRANTY of any kind, to
-% the utmost extent permitted by applicable law, neither express nor
-% implied; without malicious intent or gross negligence. In no event
-% may a licensor, author or contributor be held liable for indirect,
-% direct, other damage, loss, or other issues arising in any way out
-% of dealing in the work, even if advised of the possibility of such
-% damage or existence of a defect, except proven that it results out
-% of said person’s immediate fault when using the work as intended.
-%
-% This file is dual-licenced under the LPPL version 1.3c or later.
+% See unicodedomino.sty for copyright and licence terms. Furthermore
+% this file is dual-licenced under the LPPL version 1.3c or later.
 %-
-% Improve error and warning formatting. Fully submitted upstream.
+% Improve error and warning formatting.
 
-%: https://github.com/latex3/latex2e/pull/62
-\ifx\UTFviii@hexbyte\@undefined%
- % format a number as two-digit hex
- \gdef\UTFviii@hexbyte#1{%
-  \ifnum#1<16 0\fi%
-  \UTFviii@hexnumber{#1}%
- }%
-
+%: merged, but ifx yet to see
+\ifx\UTFviii@check@three\@undefined%
  % override message to give the byte in hex
  \def\UTFviii@invalid@err#1{%
-  \PackageError{inputenc}{Invalid UTF-8 byte "\UTFviii@hexbyte{`#1}}%
+  \PackageError{inputenc}{Invalid UTF-8 byte "\UTFviii@hexnumber{`#1}}%
    \UTFviii@invalid@help%
  }%
 \fi%
 
-%: https://github.com/latex3/latex2e/pull/63
-\ifx\UTFviii@hexcodepoint\@undefined%
- % format a number as Unicode codepoint hex
- \gdef\UTFviii@hexcodepoint#1{%
-  \ifnum#1<16 U+000%
-  \else\ifnum#1<256 U+00%
-  \else\ifnum#1<4096 U+0%
-  \else\ifnum#1<65536 U+%
-  \else\ifnum#1<1048576 U-000%
-  \else U-00%
-  \fi\fi\fi\fi\fi%
-  \UTFviii@hexnumber{#1}%
- }%
-
- % override message to format the codepoint correctly
- \gdef\UTFviii@splitcsname#1:#2\relax{%
-  #2 (\expandafter\UTFviii@hexcodepoint\expandafter{%
-   \the\numexpr\decode@UTFviii#2\relax})%
- }%
-\fi%
-
-%: https://github.com/latex3/latex2e/pull/62
-% split an invalid byte sequence for output
-\ifx\UTFviii@splitseq\@undefined%
- \gdef\UTFviii@splitseq#1:#2\relax{%
-  \UTFviii@hexseq#2\relax%
- }%
- \gdef\UTFviii@hexseq#1#2\relax{%
-  % display first octet
-  \space "\UTFviii@hexbyte{`#1}%
-  % recursively handle remaining octets
-  \ifx\relax#2\relax\else\UTFviii@hexseq#2\relax\fi%
- }%
-\fi%
+% override to format a hex Unicode codepoint correctly
+\gdef\UTFviii@hexcodepoint#1{%
+ \ifnum#1<16 U+000%
+ \else\ifnum#1<256 U+00%
+ \else\ifnum#1<4096 U+0%
+ \else\ifnum#1<65536 U+%
+ \else\ifnum#1<1048576 U-000%
+ \else U-00%
+ \fi\fi\fi\fi\fi%
+ \UTFviii@hexnumber{#1}%
+}%

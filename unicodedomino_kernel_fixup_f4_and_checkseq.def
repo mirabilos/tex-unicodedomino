@@ -1,30 +1,13 @@
 % -*- mode: tex -*-
 %-
-% Copyright © 2018
-%	mirabilos <m@mirbsd.org>
-%
-% Provided that these terms and disclaimer and all copyright notices
-% are retained or reproduced in an accompanying document, permission
-% is granted to deal in this work without restriction, including un‐
-% limited rights to use, publicly perform, distribute, sell, modify,
-% merge, give away, or sublicence.
-%
-% This work is provided “AS IS” and WITHOUT WARRANTY of any kind, to
-% the utmost extent permitted by applicable law, neither express nor
-% implied; without malicious intent or gross negligence. In no event
-% may a licensor, author or contributor be held liable for indirect,
-% direct, other damage, loss, or other issues arising in any way out
-% of dealing in the work, even if advised of the possibility of such
-% damage or existence of a defect, except proven that it results out
-% of said person’s immediate fault when using the work as intended.
-%
-% This file is dual-licenced under the LPPL version 1.3c or later.
+% See unicodedomino.sty for copyright and licence terms. Furthermore
+% this file is dual-licenced under the LPPL version 1.3c or later.
 %-
 % Fix check for illegal sequences to fail overlong encoded sequences
 % as well as codepoints outside of the Unicode range [0;10FFFF]. Add
 % "F4 to the list of permitted lead octets.
 
-%: not forwarded yet, will only do so once PR#60 (see below) is in
+%: https://github.com/latex3/latex2e/pull/83
 % new check for illegal sequences
 \gdef\UTFviii@checkseq#1:#2#3\empty{%
  \ifnum`#2<"80 %
@@ -114,7 +97,7 @@
  \fi%
 }%
 
-%: https://github.com/latex3/latex2e/pull/60
+%: fixed upstream
 % bugfix: disallow too large definitions
 \let\unicodedomino@parse@XML@charref\parse@XML@charref%
 \gdef\parse@XML@charref{%
@@ -128,7 +111,7 @@
  \unicodedomino@parse@XML@charref%
 }%
 
-%: https://github.com/latex3/latex2e/pull/60
+%: also merged
 % bugfix: add "F4 to the list of permitted lead octets
 % (needs the above fix)
 \begingroup%

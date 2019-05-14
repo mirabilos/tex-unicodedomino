@@ -2,9 +2,9 @@
 %-
 % Copyright © 2018
 %	mirabilos <m@mirbsd.org>
-% Copyright © 2017
+% Copyright © 2017, 2018
 %	mirabilos <t.glaser@tarent.de>
-% with contributions by (among others)
+% with contributions via chat by (among others)
 %	David Carlisle <http://tex.stackexchange.com/users/1090>
 %
 % Provided that these terms and disclaimer and all copyright notices
@@ -28,7 +28,7 @@
 % makes all UTF-8 available in listings.
 
 \NeedsTeXFormat{LaTeX2e}%
-\ProvidesPackage{unicodedomino}[2019/05/14 1.8 Domino for unknown codepoints]%
+\ProvidesPackage{unicodedomino}[2019/05/14 1.10 Domino for unknown codepoints]%
 
 \ifx\numexpr\@undefined%
  \PackageError{unicodedomino}{This package requires numexpr}%
@@ -36,6 +36,9 @@
 \ifx\UTFviii@defined\@undefined%
  \PackageError{unicodedomino}{This package requires UTF-8 input encoding}%
 \fi%
+
+% pull compatibility code for users of older base/utf8ienc.dtx
+\input{unicodedomino_compat.def}%
 
 % pull code from other files
 \ifx\UTFviii@check@three\@undefined%
@@ -45,7 +48,6 @@
  \input{unicodedomino_kernel_better_decode.def}%
 \fi%
 \input{unicodedomino_kernel_cosmetics.def}%
-\input{unicodedomino_compat.def}%
 
 % retrieve the last octet
 \def\unicodedomino@last#1{%
@@ -93,6 +95,22 @@
  \expandafter\UTFviii@defined\csname u8:#1\endcsname%
 }%
 
+% split an invalid byte sequence for error output
+\gdef\unicodedomino@splitseq#1:#2\relax{%
+ \unicodedomino@hexseq#2\relax%
+}%
+\gdef\unicodedomino@hexseq#1#2\relax{%
+ % display first octet
+ \space "\unicodedomino@hexbyte{`#1}%
+ % recursively handle remaining octets
+ \ifx\relax#2\relax\else\unicodedomino@hexseq#2\relax\fi%
+}%
+% format a number as two-digit hex
+\gdef\unicodedomino@hexbyte#1{%
+ \ifnum#1<16 0\fi%
+ \UTFviii@hexnumber{#1}%
+}%
+
 % main handler
 \def\UTFviii@defined#1{%
  \ifx#1\relax%
@@ -109,7 +127,7 @@
   \else%
    % invalid multibyte character
    \PackageError{inputenc}{Invalid UTF-8 byte sequence:%
-    \expandafter\UTFviii@splitseq\string#1\relax}%
+    \expandafter\unicodedomino@splitseq\string#1\relax}%
     \UTFviii@invalid@help
   \fi%
  \else%
