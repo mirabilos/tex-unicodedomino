@@ -91,16 +91,16 @@
 \else%
  % v1.2i 2019/07/09, or newer
  \long\def\UTFviii@two@octets@combine#1#2{%
-   \edef\unicodedomino@tmp{#1\unicodedomino@last{\string#2}}%
-   \expandafter\unicodedomino@octets\unicodedomino@tmp\empty%
+  \edef\unicodedomino@tmp{#1\unicodedomino@last{\string#2}}%
+  \expandafter\unicodedomino@octets\unicodedomino@tmp\empty%
  }%
  \long\def\UTFviii@three@octets@combine#1#2#3{%
-   \edef\unicodedomino@tmp{#1\unicodedomino@last{\string#2}\unicodedomino@last{\string#3}}%
-   \expandafter\unicodedomino@octets\unicodedomino@tmp\empty%
+  \edef\unicodedomino@tmp{#1\unicodedomino@last{\string#2}\unicodedomino@last{\string#3}}%
+  \expandafter\unicodedomino@octets\unicodedomino@tmp\empty%
  }%
  \long\def\UTFviii@four@octets@combine#1#2#3#4{%
-   \edef\unicodedomino@tmp{#1\unicodedomino@last{\string#2}\unicodedomino@last{\string#3}\unicodedomino@last{\string#4}}%
-   \expandafter\unicodedomino@octets\unicodedomino@tmp\empty%
+  \edef\unicodedomino@tmp{#1\unicodedomino@last{\string#2}\unicodedomino@last{\string#3}\unicodedomino@last{\string#4}}%
+  \expandafter\unicodedomino@octets\unicodedomino@tmp\empty%
  }%
 \fi%
 
