@@ -4,9 +4,8 @@
 % this file is dual-licenced under the LPPL version 1.3c or later.
 %-
 % Disallow codepoints outside of the Unicode range [0;10FFFF]; allow
-% "F4 as lead octet.
+% "F4 as lead octet. Fixed upstream v1.2e 2018/09/28
 
-%: fixed upstream
 % bugfix: disallow too large definitions
 \let\unicodedomino@parse@XML@charref\parse@XML@charref%
 \gdef\parse@XML@charref{%
@@ -20,7 +19,6 @@
  \unicodedomino@parse@XML@charref%
 }%
 
-%: also merged
 % bugfix: add "F4 to the list of permitted lead octets
 % (needs the above fix)
 \begingroup%
