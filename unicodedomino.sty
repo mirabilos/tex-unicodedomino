@@ -59,33 +59,33 @@
 }%
 
 % collect octet tokens, trim them and pass them on to handler
-\long\def\UTFviii@two@octets#1#2{%
- \ifx\protect\@typeset@protect%
-  \edef\unicodedomino@tmp{#1\unicodedomino@last{\string#2}}%
-  \expandafter\unicodedomino@octets\unicodedomino@tmp\empty%
- \else%
-  % protected, just write the original multibyte character
-  \string#1\string#2%
- \fi%
-}%
-\long\def\UTFviii@three@octets#1#2#3{%
- \ifx\protect\@typeset@protect%
-  \edef\unicodedomino@tmp{#1\unicodedomino@last{\string#2}\unicodedomino@last{\string#3}}%
-  \expandafter\unicodedomino@octets\unicodedomino@tmp\empty%
- \else%
-  % protected, just write the original multibyte character
-  \string#1\string#2\string#3%
- \fi%
-}%
-\long\def\UTFviii@four@octets#1#2#3#4{%
- \ifx\protect\@typeset@protect%
-  \edef\unicodedomino@tmp{#1\unicodedomino@last{\string#2}\unicodedomino@last{\string#3}\unicodedomino@last{\string#4}}%
-  \expandafter\unicodedomino@octets\unicodedomino@tmp\empty%
- \else%
-  % protected, just write the original multibyte character
-  \string#1\string#2\string#3\string#4%
- \fi%
-}%
+ \long\def\UTFviii@two@octets#1#2{%
+  \ifx\protect\@typeset@protect%
+   \edef\unicodedomino@tmp{#1\unicodedomino@last{\string#2}}%
+   \expandafter\unicodedomino@octets\unicodedomino@tmp\empty%
+  \else%
+   % protected, just write the original multibyte character
+   \string#1\string#2%
+  \fi%
+ }%
+ \long\def\UTFviii@three@octets#1#2#3{%
+  \ifx\protect\@typeset@protect%
+   \edef\unicodedomino@tmp{#1\unicodedomino@last{\string#2}\unicodedomino@last{\string#3}}%
+   \expandafter\unicodedomino@octets\unicodedomino@tmp\empty%
+  \else%
+   % protected, just write the original multibyte character
+   \string#1\string#2\string#3%
+  \fi%
+ }%
+ \long\def\UTFviii@four@octets#1#2#3#4{%
+  \ifx\protect\@typeset@protect%
+   \edef\unicodedomino@tmp{#1\unicodedomino@last{\string#2}\unicodedomino@last{\string#3}\unicodedomino@last{\string#4}}%
+   \expandafter\unicodedomino@octets\unicodedomino@tmp\empty%
+  \else%
+   % protected, just write the original multibyte character
+   \string#1\string#2\string#3\string#4%
+  \fi%
+ }%
 
 % handle trimmed octets
 \def\unicodedomino@octets#1\empty{%
