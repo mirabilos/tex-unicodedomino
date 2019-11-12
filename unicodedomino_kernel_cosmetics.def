@@ -5,15 +5,6 @@
 %-
 % Improve error and warning formatting.
 
-%: merged, but ifx yet to see
-\ifx\UTFviii@check@three\@undefined%
- % override message to give the byte in hex
- \def\UTFviii@invalid@err#1{%
-  \PackageError{inputenc}{Invalid UTF-8 byte "\UTFviii@hexnumber{`#1}}%
-   \UTFviii@invalid@help%
- }%
-\fi%
-
 % override to format a UCS codepoint (hexadecimal notation) correctly
 \gdef\UTFviii@hexcodepoint#1{%
  \ifnum#1<16 U+000%

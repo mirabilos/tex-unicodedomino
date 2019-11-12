@@ -44,3 +44,12 @@
    \the\numexpr\decode@UTFviii#2\relax})%
  }%
 \fi%
+
+% added in v1.2f 2018/10/05
+\ifx\UTFviii@two@octets@combine\@undefined%
+ % override message to give the byte in hex
+ \def\UTFviii@invalid@err#1{%
+  \PackageError{inputenc}{Invalid UTF-8 byte "\UTFviii@hexnumber{`#1}}%
+   \UTFviii@invalid@help%
+ }%
+\fi%
