@@ -36,6 +36,8 @@
 
 % added in v1.2e 2018/09/28
 \ifx\UTFviii@hexcodepoint\@undefined%
+ % monkey-patch bugfixes
+ \input{unicodedomino_kernel_fixup_f4.def}%
  % override message to format the codepoint correctly
  \gdef\UTFviii@splitcsname#1:#2\relax{%
   #2 (\expandafter\UTFviii@hexcodepoint\expandafter{%
