@@ -133,10 +133,10 @@
    % valid codepoint / multibyte sequence
    \PackageWarning{inputenc}{%
     Unicode character \expandafter\UTFviii@splitcsname\string#1\relax\space%
-    not set up for use\MessageBreak with LaTeX, replacing%
+    not set up for\MessageBreak use with LaTeX, replacing%
    }%
    % note: warning is the same as in utf8ienc.dtx v1.2d except
-   % with the string “, replacing” added at the end
+   % with the string “, replacing” added at the end, and rewrapped
    \expandafter\unicodedomino@domino\string#1\relax%
   \else%
    % invalid multibyte character
