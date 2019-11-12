@@ -5,9 +5,9 @@
 %-
 % Fix check for illegal sequences to fail overlong encoded sequences
 % as well as codepoints outside of the Unicode range [0;10FFFF]. Use
-% fixed-up check code to improve Unicode decoding.
+% fixed-up check code to improve Unicode decoding. This is the enti‐
+% rety of PR https://github.com/latex3/latex2e/pull/83 (rejected).
 
-%: https://github.com/latex3/latex2e/pull/83
 % new check for illegal sequences
 \gdef\UTFviii@checkseq#1:#2#3\empty{%
  \ifnum`#2<"80 %
@@ -53,6 +53,8 @@
   \fi%
  \fi%
 }%
+
+% check last trail octet in the range "80.."BF
 \gdef\UTFviii@check@one#1#2\empty{%
  \ifx\empty#2\empty%
   \ifnum`#1<"80 %
@@ -66,6 +68,8 @@
   1%
  \fi%
 }%
+
+% check second-to-last trail octet in the range #1.."BF
 \gdef\UTFviii@check@two#1.#2#3\empty{%
  \ifx\empty#3\empty%
   1%
@@ -81,6 +85,8 @@
   \fi%
  \fi%
 }%
+
+% check third-to-last trail octet in the range #1..#2
 \gdef\UTFviii@check@three#1.#2.#3#4\empty{%
  \ifx\empty#4\empty%
   1%
@@ -97,14 +103,28 @@
  \fi%
 }%
 
-%: https://github.com/latex3/latex2e/pull/83
-% override stock function, calling safer decode below
+% changed calling API for \UTFviii@checkseq (empty+relax)
+\def\UTFviii@defined#1{%
+ \ifx#1\relax%
+  \if\relax\expandafter\UTFviii@checkseq\string#1\empty\relax%
+   \UTFviii@undefined@err{#1}% from v1.2a 2018/03/24
+   % not needed in unicodedomino_compat.def though because the
+   % \UTFviii@defined macro is reimplemented by unicodedomino.sty
+  \else%
+   \PackageError{inputenc}{Invalid UTF-8 byte sequence}%
+    \UTFviii@invalid@help
+  \fi%
+ \else%
+  \expandafter#1%
+ \fi%
+}%
+
+% decode octets to codepoint number, safer
 \gdef\decode@UTFviii#1\relax{%
  \the\numexpr(\UTFviii@decode0:#1\relax)%
 }%
 
-%: https://github.com/latex3/latex2e/pull/83
-% safer decode, returns 0x1FFFFF for illegal sequences
+% safer decode, returns "1FFFFF for illegal sequences
 \gdef\UTFviii@decode#1\relax{%
  \if\relax\expandafter\UTFviii@checkseq\string#1\empty\relax%
   \UTFviii@dec@lead#1\relax%
@@ -113,7 +133,7 @@
  \fi%
 }%
 
-%: https://github.com/latex3/latex2e/pull/83
+% decode lead octet
 \gdef\UTFviii@dec@lead#1:#2#3\relax{%
  % we know #2 is in 00..7F, C2..F4
  \ifnum`#2<"80 %
@@ -132,7 +152,7 @@
  \fi%
 }%
 
-%: https://github.com/latex3/latex2e/pull/83
+% decode trail octets recursively
 \gdef\UTFviii@dec@trail#1#2\relax{%
  )*64+(`#1-"80)%
  \ifx\relax#2\else\UTFviii@dec@trail#2\relax\fi%
