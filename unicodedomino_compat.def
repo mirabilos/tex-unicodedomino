@@ -46,6 +46,9 @@
 \fi%
 
 % added in v1.2f 2018/10/05
+% unfortunately there’s no \@ifpackagelater equivalent for utf8.def,
+% especially considering it’s part of the fmt file nowadays, so we
+% check for the next added macro (after v1.2h) :/
 \ifx\UTFviii@two@octets@combine\@undefined%
  % override message to give the byte in hex
  \def\UTFviii@invalid@err#1{%
