@@ -14,7 +14,7 @@
  }%
 \fi%
 
-% override to format a hex Unicode codepoint correctly
+% override to format a UCS codepoint (hexadecimal notation) correctly
 \gdef\UTFviii@hexcodepoint#1{%
  \ifnum#1<16 U+000%
  \else\ifnum#1<256 U+00%

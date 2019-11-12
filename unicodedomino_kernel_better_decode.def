@@ -4,9 +4,9 @@
 % this file is dual-licenced under the LPPL version 1.3c or later.
 %-
 % Fix check for illegal sequences to fail overlong encoded sequences
-% as well as codepoints outside of the Unicode range [0;10FFFF]. Use
-% fixed-up check code to improve Unicode decoding. This is the enti‐
-% rety of PR https://github.com/latex3/latex2e/pull/83 (rejected).
+% as well as codepoints outside of the UCS range [0;10FFFF]; improve
+% UTF-8 decoding with fixed-up check code and a safer UTF-8 decoder.
+% This is https://github.com/latex3/latex2e/pull/83 (rejected).
 
 % new check for illegal sequences
 \gdef\UTFviii@checkseq#1:#2#3\empty{%
@@ -20,27 +20,27 @@
    1%
   \else%
    \ifnum`#2<"E0 %
-    % one 80-BF
+    % one "80‥"BF
     \UTFviii@check@one#3\empty%
    \else%
     \ifnum`#2<"E1 %
-     % A0-BF + one 80-BF
+     % "A0‥"BF + one "80‥"BF
      \UTFviii@check@two"A0.#3\empty%
     \else%
      \ifnum`#2<"F0 %
-      % two 80-BF
+      % two "80‥"BF
       \UTFviii@check@two"80.#3\empty%
      \else%
       \ifnum`#2<"F1 %
-       % 90-BF + two 80-BF
+       % "90‥"BF + two "80‥"BF
        \UTFviii@check@three"90."BF.#3\empty%
       \else%
        \ifnum`#2<"F4 %
-        % three 80-BF
+        % three "80‥"BF
         \UTFviii@check@three"80."BF.#3\empty%
        \else%
         \ifnum`#2<"F5 %
-         % 80-8F + two 80-BF
+         % "80‥"8F + two "80‥"BF
          \UTFviii@check@three"80."8F.#3\empty%
         \else%
          1%
@@ -54,7 +54,7 @@
  \fi%
 }%
 
-% check last trail octet in the range "80.."BF
+% check last trail octet in the range "80‥"BF
 \gdef\UTFviii@check@one#1#2\empty{%
  \ifx\empty#2\empty%
   \ifnum`#1<"80 %
@@ -69,7 +69,7 @@
  \fi%
 }%
 
-% check second-to-last trail octet in the range #1.."BF
+% check second-to-last trail octet in the range #1‥"BF
 \gdef\UTFviii@check@two#1.#2#3\empty{%
  \ifx\empty#3\empty%
   1%
@@ -86,7 +86,7 @@
  \fi%
 }%
 
-% check third-to-last trail octet in the range #1..#2
+% check third-to-last trail octet in the range #1‥#2
 \gdef\UTFviii@check@three#1.#2.#3#4\empty{%
  \ifx\empty#4\empty%
   1%
@@ -135,7 +135,7 @@
 
 % decode lead octet
 \gdef\UTFviii@dec@lead#1:#2#3\relax{%
- % we know #2 is in 00..7F, C2..F4
+ % we know #2 is in "00‥"7F, "C2‥"F4
  \ifnum`#2<"80 %
   `#2%
  \else%
