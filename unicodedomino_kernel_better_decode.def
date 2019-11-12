@@ -3,7 +3,99 @@
 % See unicodedomino.sty for copyright and licence terms. Furthermore
 % this file is dual-licenced under the LPPL version 1.3c or later.
 %-
-% Improved Unicode decoding using the fixed-up checkseq code.
+% Fix check for illegal sequences to fail overlong encoded sequences
+% as well as codepoints outside of the Unicode range [0;10FFFF]. Use
+% fixed-up check code to improve Unicode decoding.
+
+%: https://github.com/latex3/latex2e/pull/83
+% new check for illegal sequences
+\gdef\UTFviii@checkseq#1:#2#3\empty{%
+ \ifnum`#2<"80 %
+  \ifx\empty#3\empty%
+  \else%
+   1%
+  \fi%
+ \else%
+  \ifnum`#2<"C2 %
+   1%
+  \else%
+   \ifnum`#2<"E0 %
+    % one 80-BF
+    \UTFviii@check@one#3\empty%
+   \else%
+    \ifnum`#2<"E1 %
+     % A0-BF + one 80-BF
+     \UTFviii@check@two"A0.#3\empty%
+    \else%
+     \ifnum`#2<"F0 %
+      % two 80-BF
+      \UTFviii@check@two"80.#3\empty%
+     \else%
+      \ifnum`#2<"F1 %
+       % 90-BF + two 80-BF
+       \UTFviii@check@three"90."BF.#3\empty%
+      \else%
+       \ifnum`#2<"F4 %
+        % three 80-BF
+        \UTFviii@check@three"80."BF.#3\empty%
+       \else%
+        \ifnum`#2<"F5 %
+         % 80-8F + two 80-BF
+         \UTFviii@check@three"80."8F.#3\empty%
+        \else%
+         1%
+        \fi%
+       \fi%
+      \fi%
+     \fi%
+    \fi%
+   \fi%
+  \fi%
+ \fi%
+}%
+\gdef\UTFviii@check@one#1#2\empty{%
+ \ifx\empty#2\empty%
+  \ifnum`#1<"80 %
+   1%
+  \else%
+   \ifnum`#1>"BF %
+    1%
+   \fi%
+  \fi%
+ \else%
+  1%
+ \fi%
+}%
+\gdef\UTFviii@check@two#1.#2#3\empty{%
+ \ifx\empty#3\empty%
+  1%
+ \else%
+  \ifnum`#2<#1 %
+   1%
+  \else%
+   \ifnum`#2>"BF %
+    1%
+   \else%
+    \UTFviii@check@one#3\empty%
+   \fi%
+  \fi%
+ \fi%
+}%
+\gdef\UTFviii@check@three#1.#2.#3#4\empty{%
+ \ifx\empty#4\empty%
+  1%
+ \else%
+  \ifnum`#3<#1 %
+   1%
+  \else%
+   \ifnum`#3>#2 %
+    1%
+   \else%
+    \UTFviii@check@two"80.#4\empty%
+   \fi%
+  \fi%
+ \fi%
+}%
 
 %: https://github.com/latex3/latex2e/pull/83
 % override stock function, calling safer decode below

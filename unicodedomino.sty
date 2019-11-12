@@ -41,12 +41,10 @@
 \input{unicodedomino_compat.def}%
 
 % pull code from other files
-\ifx\UTFviii@check@three\@undefined%
- \input{unicodedomino_kernel_fixup_f4_and_checkseq.def}%
-\fi%
 \ifx\UTFviii@decode\@undefined%
  \input{unicodedomino_kernel_better_decode.def}%
 \fi%
+\input{unicodedomino_kernel_fixup_f4.def}%
 \input{unicodedomino_kernel_cosmetics.def}%
 
 % retrieve the last octet
