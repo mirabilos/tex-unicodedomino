@@ -37,7 +37,11 @@
 
 \makeatletter%
 \newcommand{\utfb@d}{%
- \cellcolor{gray}%
+ %XXX assumes \utfStreamFromNumber is only ever called with \ucst@blecnt arg
+ \edef\unicodedomino@tmp{%
+  \unicodedomino@domino@hex\ucst@blecnt%
+ }%
+ \expandafter\unicodedomino@domino@switch\unicodedomino@tmp%
 }%
 \ExplSyntaxOn
 \NewExpandableDocumentCommand{\utfStreamFromNumber}{m} {
